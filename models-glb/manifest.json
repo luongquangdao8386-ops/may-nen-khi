@@ -1,0 +1,190 @@
+[
+  {
+    "id": "rotor",
+    "name": "Trục vít · hai bánh sao",
+    "file": "rotor.glb",
+    "bytes": 2434504,
+    "refs": [
+      "H3",
+      "H2"
+    ],
+    "notes": "1 trục vít; 2 bánh sao. Biên dạng 6 rãnh / 11 răng là tham số minh họa, chưa phải biên dạng bao chế tạo."
+  },
+  {
+    "id": "airend",
+    "name": "Đầu nén cắt mở",
+    "file": "airend.glb",
+    "bytes": 6194800,
+    "refs": [
+      "H2",
+      "H3",
+      "H4"
+    ],
+    "notes": "Vỏ, nắp, gối đỡ và cơ cấu bên trong tách thành từng đối tượng."
+  },
+  {
+    "id": "motor",
+    "name": "Động cơ · khớp nối",
+    "file": "motor.glb",
+    "bytes": 1421488,
+    "refs": [
+      "H1",
+      "H4"
+    ],
+    "notes": "Gân tản nhiệt, vỏ quạt, hộp cực, chân đỡ và khớp nối có tên riêng."
+  },
+  {
+    "id": "separator",
+    "name": "Bình tách khí–nước",
+    "file": "separator.glb",
+    "bytes": 1358348,
+    "refs": [
+      "H1",
+      "H4",
+      "H7"
+    ],
+    "notes": "Có vỏ, vách hướng dòng, nước, kính quan sát, cảm biến và cụm van đỉnh."
+  },
+  {
+    "id": "cooler",
+    "name": "Két nóc · hai quạt",
+    "file": "cooler.glb",
+    "bytes": 1429516,
+    "refs": [
+      "H1",
+      "H5"
+    ],
+    "notes": "Hai quạt ở dưới két. Hạt gió minh họa hướng từ dưới lên."
+  },
+  {
+    "id": "air-filter",
+    "name": "Lọc khí đầu hút",
+    "file": "air-filter.glb",
+    "bytes": 670100,
+    "refs": [
+      "H8",
+      "H4"
+    ],
+    "notes": "Có vỏ, lõi xếp nếp, nắp, gioăng, trục giữ và đai ốc tai."
+  },
+  {
+    "id": "water-filter",
+    "name": "Lọc nước nhỏ",
+    "file": "water-filter.glb",
+    "bytes": 725572,
+    "refs": [
+      "H9",
+      "H5"
+    ],
+    "notes": "Đầu lọc cố định, cốc tháo xuống, lõi và trục giữ tách riêng."
+  },
+  {
+    "id": "combined-filter",
+    "name": "Lọc nước tổ hợp",
+    "file": "combined-filter.glb",
+    "bytes": 1822028,
+    "refs": [
+      "H10"
+    ],
+    "notes": "Nắp bắt bu lông, đĩa ép, đai ốc, lõi dài và đế giữ."
+  },
+  {
+    "id": "softener",
+    "name": "Nước bù · làm mềm",
+    "file": "softener.glb",
+    "bytes": 607892,
+    "refs": [
+      "H7"
+    ],
+    "notes": "Bình làm mềm, đầu điều khiển, van điện từ, van tay và lọc Y."
+  },
+  {
+    "id": "inlet",
+    "name": "Van hút khí",
+    "file": "inlet.glb",
+    "bytes": 413052,
+    "refs": [
+      "H4",
+      "H7"
+    ],
+    "notes": "Thân van, mặt bích, đĩa van và cơ cấu chấp hành."
+  },
+  {
+    "id": "minimum",
+    "name": "Van áp suất tối thiểu",
+    "file": "minimum.glb",
+    "bytes": 753584,
+    "refs": [
+      "H1",
+      "H4"
+    ],
+    "notes": "Thân van, nắp lò xo, cửa ra và đầu lắp đồng hồ."
+  },
+  {
+    "id": "check",
+    "name": "Van một chiều",
+    "file": "check.glb",
+    "bytes": 754228,
+    "refs": [
+      "H4",
+      "H6"
+    ],
+    "notes": "Mặt bích, thân, đĩa và lò xo hồi."
+  },
+  {
+    "id": "water-valve",
+    "name": "Van ngắt nước",
+    "file": "water-valve.glb",
+    "bytes": 108168,
+    "refs": [
+      "H6",
+      "H7"
+    ],
+    "notes": "Cuộn điện, thân van, đầu nối và ty van."
+  },
+  {
+    "id": "distributor",
+    "name": "Bộ chia nước",
+    "file": "distributor.glb",
+    "bytes": 319092,
+    "refs": [
+      "H5",
+      "H6"
+    ],
+    "notes": "Thân chia nhỏ, đầu cấp và các nhánh ra."
+  },
+  {
+    "id": "chassis",
+    "name": "Khung · tủ điện",
+    "file": "chassis.glb",
+    "bytes": 272956,
+    "refs": [
+      "H1"
+    ],
+    "notes": "Bệ máy, cột, dầm nóc, tủ điện và bảng điều khiển."
+  },
+  {
+    "id": "receiver",
+    "name": "Bình tích áp khí nén",
+    "file": "receiver.glb",
+    "bytes": 948140,
+    "refs": [],
+    "notes": "Mẫu tổng quát; bộ ảnh chưa có bản vẽ riêng của bình này."
+  },
+  {
+    "id": "dryer",
+    "name": "Máy sấy lạnh",
+    "file": "dryer.glb",
+    "bytes": 678188,
+    "refs": [],
+    "notes": "Mẫu cấu tạo tổng quát; gồm máy nén lạnh, dàn ngưng, quạt và trao đổi nhiệt."
+  },
+  {
+    "id": "desiccant",
+    "name": "Sấy hấp phụ hai tháp",
+    "file": "desiccant.glb",
+    "bytes": 1334392,
+    "refs": [],
+    "notes": "Hai tháp, vật liệu hút ẩm, van, đường tái sinh và bộ giảm thanh."
+  }
+]

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ví dụ Three.js — Dựng một cụm máy</title>
+<style>body{margin:0;font:14px system-ui}canvas{display:block}p{position:absolute;top:8px;left:16px;padding:12px;background:#fffdf3dd;border-radius:8px;max-width:80vw}a{color:#167a9f}</style>
+<script type="importmap">
+{"imports":{"three":"./vendor/three.module.js"}}
+</script>
+<p>Ví dụ tối giản: kéo để xoay, cuộn để phóng to. <a href="index.html">Mở trình xem đầy đủ</a>.<br>Chạy bằng <code>python3 run.py</code>; đổi ID trong mã để chọn cụm khác.</p>
+<script type="module">
+// Đây là đoạn gọi mã vẽ 3D. Mở models.js và geometry.js để chỉnh chi tiết.
+import { THREE } from './geometry.js';
+import { buildModel, updateMotion, setExplosion } from './models.js';
+import { OrbitControls } from './vendor/OrbitControls.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xeaf0f4);
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.01, 200);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+document.body.append(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x6a8598, 3));
+const key = new THREE.DirectionalLight(0xffffff, 4);
+key.position.set(4, 8, 6);
+scene.add(key);
+
+const model = buildModel('rotor'); // Đổi thành 'airend', 'cooler', 'water-filter'…
+scene.add(model.root);
+setExplosion(model, 0); // Giá trị từ 0 đến 1 để tách cụm.
+
+const bounds = new THREE.Box3().setFromObject(model.root);
+const center = bounds.getCenter(new THREE.Vector3());
+const size = bounds.getSize(new THREE.Vector3());
+const distance = Math.max(size.y, size.x / camera.aspect, size.z / camera.aspect) * 3;
+camera.position.copy(center).add(new THREE.Vector3(1.5, 1, 1.7).normalize().multiplyScalar(distance));
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.copy(center);
+controls.enableDamping = true;
+controls.update();
+
+const started = performance.now();
+renderer.setAnimationLoop(now => {
+  updateMotion(model, (now - started) / 1000);
+  controls.update();
+  renderer.render(scene, camera);
+});
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</html>
