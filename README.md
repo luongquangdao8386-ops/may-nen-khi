@@ -2,7 +2,8 @@
 
 Mô hình 3D máy nén khí trục vít đơn (một trục vít, hai bánh sao), không dầu trong buồng nén, dùng nước bôi trơn – làm kín – giải nhiệt, giải nhiệt bằng két gió có quạt. Gồm **trạm hoàn chỉnh** và 18 cụm riêng: đầu nén, động cơ, bình tách, két, khung – tủ điện, van, lọc, cụm nước bù – làm mềm, bình tích áp, máy sấy lạnh, máy sấy hấp phụ. Viết bằng HTML/JavaScript thuần với Three.js 0.180, chạy offline, xuất được GLB.
 
-- **Mở ngay:** nhấp đúp `MO-NGAY.html` (Chrome/Edge có WebGL 2). Trình xem mở sẵn trạm hoàn chỉnh.
+- **Mở trên web:** https://luongquangdao8386-ops.github.io/may-nen-khi/ (GitHub Pages, nhánh `main`, thư mục gốc). Trình xem mở sẵn trạm hoàn chỉnh.
+- **Mở offline:** nhấp đúp `MO-NGAY.html` (Chrome/Edge có WebGL 2).
 - **Sửa mã:** chạy `python3 run.py` rồi mở `index.html`.
 - **Hướng dẫn đầy đủ, tham số, giả định và giới hạn:** [HUONG-DAN.md](HUONG-DAN.md).
 

@@ -12,6 +12,8 @@ Bản 3.0 thêm mô hình `station` (trạm hoàn chỉnh) và nâng chi tiết 
 
 MO-NGAY.html (khoảng 8 MB) chứa sẵn Three.js, thư viện CSG, mã mô hình, giao diện và mười ảnh tham chiếu; không tải gì từ mạng, không cần API key. Sau khi sửa mã nguồn, chạy lại lệnh dựng ở phần 10 để cập nhật tệp này.
 
+Bản web: https://luongquangdao8386-ops.github.io/may-nen-khi/ (GitHub Pages phát trực tiếp `index.html` của nhánh `main`; tệp `.nojekyll` để GitHub không xử lý Jekyll). Mỗi lần đẩy lên `main`, trang tự cập nhật sau một đến vài phút.
+
 ## 2. Chạy bản nguồn để sửa mã
 
 Cần Python 3, không cần cài thêm gói.
