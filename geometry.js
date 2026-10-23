@@ -41,6 +41,10 @@ export const M = {
   mesh: std(0xa9b8c1,.7,.45,{transparent:true,opacity:.6,depthWrite:false,side:THREE.DoubleSide}),
   label: std(0xece6d4,.1,.6),
   handle: std(0xc9473a,.2,.45),
+  green: std(0x3f9a5c,.2,.45),
+  concrete: std(0xcdc8bd,0,.95),       // nền trạm (minh họa)
+  cable: std(0x1c2228,.05,.7),          // vỏ cáp điện
+  tray: std(0x9aa6ae,.6,.45),           // máng cáp mạ kẽm
   cut: std(0xd36a43,.05,.65,{side:THREE.DoubleSide}),  // mặt cắt
 };
 const UP = new THREE.Vector3(0,1,0);
@@ -53,11 +57,12 @@ export function part(m,name,pos=[0,0,0],parent=m.root,description='',opts={}) {
 }
 export function explode(m,g,offset) { m.explodables.push({ object:g,base:g.position.clone(),offset:new THREE.Vector3(...offset) }); return g; }
 export function cover(m,obj) {
-  obj.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.side=THREE.DoubleSide;m.covers.push(o);}});return obj;
+  // vật liệu nhân bản không mang theo mặt phẳng cắt đang bật trên vật liệu dùng chung (ví dụ của trạm)
+  obj.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.side=THREE.DoubleSide;o.material.clippingPlanes=[];m.covers.push(o);}});return obj;
 }
 // Vỏ kín có độ dày: ở chế độ mặt cắt được cắt thật bằng CSG và tô màu mặt cắt.
 export function solid(m,obj) {
-  obj.traverse(o=>{if(o.isMesh){o.material=o.material.clone();m.solids.push(o);}});return obj;
+  obj.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.clippingPlanes=[];m.solids.push(o);}});return obj;
 }
 export function mesh(geo,mat,pos,parent,name='') { const o=new THREE.Mesh(geo,mat);o.position.set(...pos);o.castShadow=true;o.receiveShadow=true;o.name=name;parent.add(o);return o; }
 
@@ -121,9 +126,9 @@ export function thread(r,length,pos,parent,axis='y',pitch=.08) {
   mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),n,.008,4,false),M.bright,[0,0,0],g);
   if(axis==='x')g.rotation.z=-Math.PI/2;if(axis==='z')g.rotation.x=Math.PI/2;return g;
 }
-export function pipe(coords,r,mat,parent) {
+export function pipe(coords,r,mat,parent,bendR) {
   const pts=coords.map(p=>new THREE.Vector3(...p));const path=new THREE.CurvePath();let prev=pts[0];
-  for(let i=1;i<pts.length-1;i++){const c=pts[i];const bend=Math.min(.17,c.distanceTo(pts[i-1])*.3,c.distanceTo(pts[i+1])*.3);
+  for(let i=1;i<pts.length-1;i++){const c=pts[i];const bend=Math.min(bendR??Math.max(.17,r*1.8),c.distanceTo(pts[i-1])*(bendR?.48:.3),c.distanceTo(pts[i+1])*(bendR?.48:.3));
     const a=c.clone().add(pts[i-1].clone().sub(c).normalize().multiplyScalar(bend));
     const b=c.clone().add(pts[i+1].clone().sub(c).normalize().multiplyScalar(bend));
     path.add(new THREE.LineCurve3(prev,a));path.add(new THREE.QuadraticBezierCurve3(a,c,b));prev=b;
@@ -249,17 +254,41 @@ export function lockNut(parent,{ri,ro,w},pos=[0,0,0],axis='x',name='Đai ốc kh
   return orientObject(g,axis);
 }
 
+// Lò xo xoắn trụ dọc trục Y từ 0 đến length; hai đầu có vòng khép (mài phẳng).
+export function springGeometry({r=.15,length=.5,turns=6,wire=.02,seg=24}={}) {
+  const pts=[],n=Math.ceil((turns+1)*seg),end=.5/(turns+1);
+  for(let i=0;i<=n;i++){const u=i/n,a=u*(turns+1)*Math.PI*2;const k=u<end?0:u>1-end?1:(u-end)/(1-2*end);pts.push(new THREE.Vector3(Math.cos(a)*r,wire+k*(length-2*wire),Math.sin(a)*r));}
+  return new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),n,wire,6,false);
+}
+// Ống gân (ống mềm) theo đường gấp khúc: bán kính dao động theo chiều dài với bước pitch.
+export function hoseGeometry(coords,r,{pitch=.08,depth=.12,bend}={}) {
+  const pts=coords.map(p=>new THREE.Vector3(...p)),path=new THREE.CurvePath();let prev=pts[0];
+  for(let i=1;i<pts.length-1;i++){const c=pts[i],b=Math.min(bend??Math.max(.17,r*2.2),c.distanceTo(pts[i-1])*.45,c.distanceTo(pts[i+1])*.45);
+    const A=c.clone().add(pts[i-1].clone().sub(c).normalize().multiplyScalar(b)),B=c.clone().add(pts[i+1].clone().sub(c).normalize().multiplyScalar(b));
+    path.add(new THREE.LineCurve3(prev,A));path.add(new THREE.QuadraticBezierCurve3(A,c,B));prev=B;}
+  path.add(new THREE.LineCurve3(prev,pts.at(-1)));
+  const L=path.getLength(),seg=Math.max(32,Math.ceil(L/pitch*6)),g=new THREE.TubeGeometry(path,seg,r,16,false),p=g.attributes.position;
+  for(let i=0;i<=seg;i++){const u=i/seg,c=path.getPointAt(u),k=1+depth*Math.max(0,Math.sin(u*L/pitch*Math.PI*2));
+    for(let j=0;j<=16;j++){const idx=i*17+j,v=new THREE.Vector3(p.getX(idx),p.getY(idx),p.getZ(idx)).sub(c).multiplyScalar(k).add(c);p.setXYZ(idx,v.x,v.y,v.z);}}
+  g.computeVertexNormals();return g;
+}
+
 // ---------- Khối đặc bằng CSG (three-bvh-csg) ----------
 const brushOf=g=>{const b=new Brush(g);b.updateMatrixWorld();return b;};
 // Hợp các khối `add`, trừ các khối `sub`. Hình học đầu vào phải kín và đã đặt đúng vị trí; sẽ bị giải phóng sau khi dùng.
-export function csgGeometry(add,sub=[]) {
+// key: nếu có, kết quả được giữ lại để lần dựng sau (cùng tham số) dùng ngay, không tính lại CSG.
+const CSG_CACHE=new Map();
+export function csgGeometry(add,sub=[],key=null) {
+  if(key&&CSG_CACHE.has(key)){for(const g of [...add,...sub])g.dispose();return CSG_CACHE.get(key);}
   const ev=new Evaluator();ev.attributes=['position','normal'];ev.useGroups=false;
   let acc=brushOf(add[0]);
   for(const g of add.slice(1))acc=ev.evaluate(acc,brushOf(g),ADDITION);
   if(sub.length){let hole=brushOf(sub[0]);for(const g of sub.slice(1))hole=ev.evaluate(hole,brushOf(g),ADDITION);acc=ev.evaluate(acc,hole,SUBTRACTION);}
   for(const g of [...add,...sub])g.dispose();
   const out=new THREE.BufferGeometry();for(const k of ['position','normal'])out.setAttribute(k,new THREE.Float32BufferAttribute(Array.from(acc.geometry.attributes[k].array),3));
-  if(acc.geometry.index)out.setIndex(Array.from(acc.geometry.index.array));return out;
+  if(acc.geometry.index)out.setIndex(Array.from(acc.geometry.index.array));
+  if(key){CSG_CACHE.set(key,out);if(CSG_CACHE.size>80)CSG_CACHE.delete(CSG_CACHE.keys().next().value);}
+  return out;
 }
 // Hình học đặt sẵn vị trí để đưa vào CSG.
 export const placed=(g,pos=[0,0,0],rot=null)=>{if(rot)g.applyMatrix4(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(...rot)));g.translate(...pos);return g;};

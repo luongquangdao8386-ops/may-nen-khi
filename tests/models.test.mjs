@@ -5,8 +5,8 @@ import {CATALOG,buildModel,setExplosion,updateMotion,setSection,setAirflow,showP
 
 const models=new Map();const get=id=>{if(!models.has(id))models.set(id,buildModel(id));return models.get(id);};
 
-test('18 cụm tạo được hình học hợp lệ, chỉ số và pháp tuyến hữu hạn',()=>{
- assert.equal(CATALOG.length,18);
+test('19 mô hình (18 cụm và trạm ghép) tạo được hình học hợp lệ, chỉ số và pháp tuyến hữu hạn',()=>{
+ assert.equal(CATALOG.length,19);
  for(const item of CATALOG){const m=get(item.id);let count=0;m.root.traverse(o=>{if(o.isMesh){count++;const g=o.geometry,p=g.attributes.position;assert.ok(p?.count>0,item.id);for(const a of ['position','normal'])if(g.attributes[a])for(const v of g.attributes[a].array)assert.ok(Number.isFinite(v),item.id+' '+a);if(g.index)for(const i of g.index.array)assert.ok(i>=0&&i<p.count,item.id+' index');}});assert.ok(count>0);const b=new THREE.Box3().setFromObject(m.root);assert.ok(!b.isEmpty());assert.ok(b.getSize(new THREE.Vector3()).toArray().every(n=>n>0&&Number.isFinite(n)));}
 });
 test('Cơ cấu có một trục vít chính và đúng hai bánh sao trên các trục vuông góc',()=>{
@@ -36,7 +36,7 @@ test('Rãnh trục vít: biên dạng kín, mặt trụ không chồng lấn, ph
  assert.throws(()=>screwKinematics({grooveDepth:.8}),/không hợp lệ/);assert.throws(()=>screwKinematics({grooves:12,gateTeeth:11}),/không hợp lệ/);
 });
 test('Két có hai quạt bên dưới lõi; chiều gió đảo được',()=>{
- const m=get('cooler');const fans=m.parts.filter(p=>p.name.startsWith('Cụm quạt '));assert.equal(fans.length,2);assert.ok(fans.every(p=>p.position.y<0));assert.equal(m.motions.length,2);m.flow.update(2.3);const positions=m.flow.object.children[0].geometry.attributes.position.array;assert.ok(Array.from(positions).every(Number.isFinite));
+ const m=get('cooler');const fans=m.parts.filter(p=>p.name.startsWith('Cụm quạt '));assert.equal(fans.length,2);const core=m.parts.find(p=>p.name.startsWith('Lõi két'));assert.ok(fans.every(p=>p.position.y<core.position.y));assert.equal(m.motions.length,2);m.flow.update(2.3);const positions=m.flow.object.children[0].geometry.attributes.position.array;assert.ok(Array.from(positions).every(Number.isFinite));
  const ys=()=>{m.flow.update(1);const a=Array.from(positions).filter((_,i)=>i%3===1);m.flow.update(1.1);return Array.from(positions).filter((_,i)=>i%3===1).map((y,i)=>y-a[i]);};
  const up=ys().filter(d=>Math.abs(d)<.5);assert.ok(up.every(d=>d>0));
  setAirflow(m,'xuong');assert.ok(m.motions.every(a=>a.ratio<0));assert.ok(ys().filter(d=>Math.abs(d)<.5).every(d=>d<0));setAirflow(m,'len');
@@ -88,4 +88,39 @@ test('Mọi cụm có cổng nối; dấu cổng không xuất GLB còn nút c�
 test('Không tự thêm thiết bị không có trong ảnh: không có bơm nước, không có RO ở cụm làm mềm',()=>{
  for(const item of CATALOG){const m=get(item.id);for(const p of m.parts){assert.ok(!/bơm/i.test(p.name),item.id+': '+p.name);}}
  assert.ok(!get('softener').parts.some(p=>/RO|thẩm thấu/i.test(p.name)));
+});
+
+test('Trạm ghép: đủ cụm, mặt ghép trực tiếp trùng khít, ống nối đúng cổng',()=>{
+ const st=get('station'),mods=st.info.modules.map(x=>x.id);
+ for(const id of ['airend','motor','inlet','check','separator','minimum','chassis','cooler','air-filter','water-filter','water-valve','distributor','softener','receiver','dryer','desiccant'])assert.ok(mods.includes(id),id);
+ assert.ok(!mods.includes('combined-filter'),'lọc nước tổ hợp H10 không mặc định lắp nối tiếp');
+ // một trục vít, hai bánh sao (nằm trong đầu nén)
+ assert.equal(st.parts.filter(p=>p.name==='Trục vít chính').length,1);assert.equal(st.parts.filter(p=>p.name.startsWith('Đĩa răng bánh sao')).length,2);
+ // bình tách trong gói máy và bình tích áp bên ngoài là hai bình khác nhau
+ const sep=st.root.children.find(o=>o.userData.module==='separator'),rec=st.root.children.find(o=>o.userData.module==='receiver');assert.ok(sep&&rec&&sep!==rec);
+ const box=o=>new THREE.Box3().setFromObject(o),pk=box(st.root.children.find(o=>o.userData.module==='chassis'));
+ assert.ok(pk.containsPoint(box(sep).getCenter(new THREE.Vector3())));assert.ok(box(rec).min.x>9.5,'bình tích áp nằm ngoài gói máy');
+ // mặt ghép trực tiếp (bích động cơ – chuông nối, van hút, van một chiều, van áp suất tối thiểu) trùng khít
+ const direct=st.info.links.filter(l=>l.via==='ghép trực tiếp');assert.equal(direct.length,4);for(const l of direct)assert.ok(l.gap<1e-6,l.from+' ↔ '+l.to+': '+l.gap);
+ assert.ok(st.info.links.length>=25,'số mối nối: '+st.info.links.length);
+ // vòng nước H5/H6: bình tách → két → lọc nước → van ngắt → bộ chia → đầu nén
+ const has=(a,b)=>st.info.links.some(l=>l.from.includes(a)&&l.to.includes(b));
+ assert.ok(has('Nước ra (tới két','Nước nóng vào két'));assert.ok(has('Nước đã làm mát ra','Nước vào (từ két)'));assert.ok(has('Nước đã lọc ra','Nước vào'));
+ assert.ok(has('Van ngắt nước','Bộ chia nước'));assert.equal(st.info.links.filter(l=>l.from.includes('Nhánh ra')&&l.to.includes('Đầu nén')).length,4);
+ assert.ok(has('Ra ống chính','Vào hỗn hợp'));assert.ok(has('Gió sạch vào','Gió sạch ra'));
+ // két nóc trên khung, hai quạt dưới lõi két; không có bộ trao đổi nhiệt dạng tấm của phương án giải nhiệt nước (H6)
+ const cooler=st.root.children.find(o=>o.userData.module==='cooler');assert.ok(box(cooler).min.y>box(sep).max.y-.01);
+ assert.ok(!st.parts.some(p=>/trao đổi nhiệt dạng tấm|plate heat/i.test(p.name)));
+ assert.ok(st.parts.filter(p=>p.userData.minhHoa).length>=10);
+ const kinds=new Set(st.ports.map(p=>p.userData.port.kind));for(const k of ['khi','nuoc','dien'])assert.ok(kinds.has(k),k);
+});
+test('Trạm ghép: trục động cơ quay cùng trục vít; mặt cắt bằng mặt phẳng được gỡ khi đổi mô hình',()=>{
+ const st=get('station'),screw=st.parts.find(p=>p.name==='Trục vít chính'),shaft=st.parts.find(p=>p.name==='Trục động cơ');
+ for(const t of [.7,2.3,5.1]){updateMotion(st,t);st.root.updateMatrixWorld(true);const up=o=>new THREE.Vector3(0,1,0).applyQuaternion(o.getWorldQuaternion(new THREE.Quaternion()));assert.ok(up(screw).distanceTo(up(shaft))<1e-9,'t = '+t);}
+ updateMotion(st,0);
+ const planes=setSection(st,true);assert.ok(planes.length>=2);assert.ok(M.steel.clippingPlanes.length>0);
+ // cụm dựng trong lúc trạm đang cắt không thừa hưởng mặt phẳng cắt ở vật liệu nhân bản
+ const fresh=buildModel('motor');setSection(fresh,false);let clipped=0;fresh.root.traverse(o=>{if(o.isMesh)for(const m of [o.material].flat())if(m.clippingPlanes?.length)clipped++;});assert.equal(clipped,0);
+ setSection(get('rotor'),false);assert.equal(M.steel.clippingPlanes.length,0);
+ setSection(st,false);
 });

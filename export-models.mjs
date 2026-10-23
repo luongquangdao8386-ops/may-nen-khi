@@ -1,5 +1,5 @@
 /** Xuất GLB thật bằng Three.js. Không cần trình duyệt; cần Node.js >= 18.
- *  node export-models.mjs                       → xuất cả 18 cụm vào models-glb/
+ *  node export-models.mjs                       → xuất 18 cụm và trạm ghép vào models-glb/
  *  node export-models.mjs rotor airend          → chỉ xuất các cụm đã nêu
  *  node export-models.mjs rotor --tham-so '{"grooves":5}' --ra ./ket-qua   → xuất với tham số riêng vào thư mục khác
  */
@@ -35,7 +35,8 @@ for(const id of ids){
  let triangles=0;model.root.traverse(o=>{if(o.isMesh&&o.visible)triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3*(o.isInstancedMesh?o.count:1);});
  manifest.push({id,name:entry.name,file:id+'.glb',bytes:data.byteLength,triangles:Math.round(triangles),refs:entry.refs,notes:entry.note,
   summary:model.info.summary,params:entry.params?{...model.info.defaults,...params}:undefined,
-  illustrativeParts:model.parts.filter(p=>p.userData.minhHoa).map(p=>p.name),ports});
+  illustrativeParts:model.parts.filter(p=>p.userData.minhHoa).map(p=>p.name),ports,
+  ...(model.info.modules?{modules:model.info.modules,links:model.info.links}:{})});
  console.log(id,data.byteLength,'bytes',Math.round(triangles),'tam giác',ports.length,'cổng');
  const geometries=new Set();model.root.traverse(o=>{if(o.geometry)geometries.add(o.geometry);});for(const g of geometries)g.dispose();
 }

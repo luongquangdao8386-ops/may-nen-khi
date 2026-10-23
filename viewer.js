@@ -57,7 +57,9 @@ function renderParts(){const list=$('#parts');list.replaceChildren();const n=mod
  }
 }
 function stats(){let triangles=0,meshes=0;model.root.traverse(o=>{if(o.isMesh&&!o.parent?.userData.portMarker){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3*(o.isInstancedMesh?o.count:1);}});$('#geometry-stats').textContent=`${meshes.toLocaleString('vi')} mesh · ${Math.round(triangles).toLocaleString('vi')} tam giác`;}
-function updateBounds(){model.root.updateMatrixWorld(true);bounds.setFromObject(model.root);bounds.getCenter(center);bounds.getSize(size);const d=Math.max(size.x,size.y,size.z);ground.position.y=bounds.min.y-.08;grid.position.set(center.x,bounds.min.y-.07,center.z);grid.scale.setScalar(d/7);}
+function updateBounds(){model.root.updateMatrixWorld(true);bounds.setFromObject(model.root);bounds.getCenter(center);bounds.getSize(size);const d=Math.max(size.x,size.y,size.z);ground.position.y=bounds.min.y-.08;grid.position.set(center.x,bounds.min.y-.07,center.z);grid.scale.setScalar(d/7);
+ // bóng đổ phủ vừa mô hình (cụm nhỏ hay cả trạm)
+ const half=Math.max(12,d*.62);key.position.copy(center).add(new THREE.Vector3(-7,10,8).normalize().multiplyScalar(Math.max(14,d*1.1)));key.target.position.copy(center);key.target.updateMatrixWorld();Object.assign(key.shadow.camera,{left:-half,right:half,top:half,bottom:-half,near:.1,far:Math.max(40,d*3)});key.shadow.camera.updateProjectionMatrix();}
 function fitCamera(type=view){view=type;updateBounds();const aspect=Math.max(.4,viewport.clientWidth/viewport.clientHeight);const maxDim=Math.max(size.y,size.x/aspect,size.z/aspect);distance=Math.max(maxDim/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2)))*1.65,Math.max(...size.toArray())*1.45);
  const dirs={iso:[1.5,1.0,1.7],front:[0,.10,1],top:[.001,1,.001]};const dir=new THREE.Vector3(...dirs[type]).normalize();camera.position.copy(center).addScaledVector(dir,distance);camera.near=Math.max(.01,distance/2000);camera.far=Math.max(200,distance*20);camera.updateProjectionMatrix();controls.target.copy(center);controls.minDistance=Math.max(.2,Math.max(...size.toArray())*.3);controls.maxDistance=distance*5;controls.update();for(const b of document.querySelectorAll('[data-view]'))b.classList.toggle('active',b.dataset.view===type);}
 function applyMode(){deselect();setSection(model,mode==='section');const wire=$('#wireframe').checked;model.root.traverse(o=>{if(o.isMesh&&!o.parent?.userData.portMarker)for(const m of mats(o))m.wireframe=wire;});for(const b of document.querySelectorAll('[data-mode]'))b.classList.toggle('active',b.dataset.mode===mode);}
@@ -75,9 +77,16 @@ function renderParams(){
    label.append(span,input);list.append(label);}
 }
 $('#param-reset').addEventListener('click',()=>{delete paramValues[pkey(currentId)];reload();});
-function reload(){const keep={pos:camera.position.clone(),target:controls.target.clone()};loadModel(currentId,{keepCamera:keep});}
+function reload(){const keep={pos:camera.position.clone(),target:controls.target.clone()};return loadModel(currentId,{keepCamera:keep});}
 
-function loadModel(id,{keepCamera=null}={}){
+// Cụm dựng lâu (trạm ghép ~10 giây, đầu nén ~2 giây): hiện lớp chờ rồi mới dựng để trình duyệt kịp vẽ thông báo.
+const HEAVY={station:'Đang ghép trạm hoàn chỉnh (khoảng 10 giây)…',airend:'Đang dựng đầu nén…'};
+function loadModel(id,opts={}){
+ if(!HEAVY[id])return Promise.resolve(loadModelNow(id,opts));
+ $('#loading-text').textContent=HEAVY[id];$('#loading').hidden=false;
+ return new Promise(resolve=>setTimeout(()=>requestAnimationFrame(()=>setTimeout(()=>{try{loadModelNow(id,opts);}finally{$('#loading').hidden=true;$('#loading-text').textContent='Đang dựng hình học 3D…';resolve();}},0)),20));
+}
+function loadModelNow(id,{keepCamera=null}={}){
  deselect();
  let next,error='';
  try{next=buildModel(id,paramValues[pkey(id)]??{});}catch(e){error=e.message;console.warn(e.message);delete paramValues[pkey(id)];next=buildModel(id);}
@@ -113,9 +122,9 @@ $('#export-glb').addEventListener('click',async()=>{const b=$('#export-glb');b.d
 $('#export-png').addEventListener('click',()=>{selectionBox.visible=false;renderer.render(scene,camera);renderer.domElement.toBlob(blob=>{if(blob)download(blob,currentId+'-goc-nhin.png');},'image/png');if(selected)selectionBox.visible=true;});
 function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);if(model)fitCamera();}
 new ResizeObserver(resize).observe(viewport);renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();$('#error').hidden=false;$('#error-detail').textContent='WebGL đã bị ngắt. Hãy tải lại trang.';});
-loadModel('rotor');resize();$('#loading').hidden=true;
+resize();loadModel('station');
 let last=performance.now(),fpsTime=0,frames=0;
-function animate(now){requestAnimationFrame(animate);const dt=Math.min(Math.max((now-last)/1000,0),.1);last=now;if(running){t+=dt*Number($('#speed').value);updateMotion(model,t);}if(model.flow)model.flow.object.visible=$('#airflow').checked;controls.update();if(selected)selectionBox.setFromObject(selected);renderer.render(scene,camera);frames++;fpsTime+=dt;if(fpsTime>1){$('#fps').textContent=Math.round(frames/fpsTime)+' FPS';frames=0;fpsTime=0;}}
+function animate(now){requestAnimationFrame(animate);const dt=Math.min(Math.max((now-last)/1000,0),.1);last=now;if(model){if(running){t+=dt*Number($('#speed').value);updateMotion(model,t);}if(model.flow)model.flow.object.visible=$('#airflow').checked;}controls.update();if(selected)selectionBox.setFromObject(selected);renderer.render(scene,camera);frames++;fpsTime+=dt;if(fpsTime>1){$('#fps').textContent=Math.round(frames/fpsTime)+' FPS';frames=0;fpsTime=0;}}
 requestAnimationFrame(animate);
 // Cho phép kiểm thử tự động điều khiển trình xem.
-window.mechViewer={loadModel:id=>loadModel(id),setMode:m=>{mode=m;if(m==='explode')updateExplosion(.7);else updateExplosion(0);applyMode();fitCamera();},fitCamera,get model(){return model;},camera,controls,setParams:(id,p)=>{paramValues[pkey(id)]=p;if(id===currentId)reload();}};
+window.mechViewer={loadModel:id=>loadModel(id),get ready(){return $('#loading').hidden;},setMode:m=>{mode=m;if(m==='explode')updateExplosion(.7);else updateExplosion(0);applyMode();fitCamera();},fitCamera,get model(){return model;},camera,controls,setParams:(id,p)=>{paramValues[pkey(id)]=p;if(id===currentId)return reload();}};
