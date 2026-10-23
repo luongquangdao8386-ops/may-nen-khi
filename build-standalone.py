@@ -21,7 +21,9 @@ def main():
         'three':(root/'vendor/three.module.js').read_text(encoding='utf-8').replace("'./three.core.js'","'three-core'"),
         'three/addons/controls/OrbitControls.js':(root/'vendor/OrbitControls.js').read_text(encoding='utf-8'),
         'three/addons/exporters/GLTFExporter.js':(root/'vendor/GLTFExporter.js').read_text(encoding='utf-8'),
-        'mech-geometry':(root/'geometry.js').read_text(encoding='utf-8').replace("from './vendor/three.module.js'","from 'three'"),
+        'three-mesh-bvh':(root/'vendor/three-mesh-bvh.module.js').read_text(encoding='utf-8').replace("from './three.module.js'","from 'three'"),
+        'three-bvh-csg':(root/'vendor/three-bvh-csg.module.js').read_text(encoding='utf-8').replace("from './three.module.js'","from 'three'").replace("from './three-mesh-bvh.module.js'","from 'three-mesh-bvh'"),
+        'mech-geometry':(root/'geometry.js').read_text(encoding='utf-8').replace("from './vendor/three.module.js'","from 'three'").replace("from './vendor/three-bvh-csg.module.js'","from 'three-bvh-csg'"),
         'mech-models':(root/'models.js').read_text(encoding='utf-8').replace("from './geometry.js'","from 'mech-geometry'"),
         'mech-viewer':viewer,
     }
@@ -31,7 +33,11 @@ def main():
     html=re.sub(r'<script type="importmap">.*?</script>',lambda m:'<script type="importmap">'+json.dumps({'imports':imports})+'</script>',html,flags=re.S)
     html=html.replace("import('./viewer.js')","import('mech-viewer')")
     target=root/'MO-NGAY.html';target.write_text(html,encoding='utf-8')
-    print('MO-NGAY.html:',target.stat().st_size,'bytes;',len(refs),'ảnh tham chiếu; 7 mô-đun JavaScript.')
+    for key,text in modules.items():
+        for line in text.splitlines():
+            if line.startswith('import ') and "from './" in line:
+                raise SystemExit('Mô-đun '+key+' còn đường dẫn tương đối, không chạy được trong bản một tệp: '+line[:80])
+    print('MO-NGAY.html:',target.stat().st_size,'bytes;',len(refs),'ảnh tham chiếu;',len(modules),'mô-đun JavaScript.')
 
 
 if __name__=='__main__':

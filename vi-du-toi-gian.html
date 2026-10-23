@@ -26,7 +26,8 @@ const key = new THREE.DirectionalLight(0xffffff, 4);
 key.position.set(4, 8, 6);
 scene.add(key);
 
-const model = buildModel('rotor'); // Đổi thành 'airend', 'cooler', 'water-filter'…
+// Đổi ID thành 'airend', 'motor', 'separator', 'cooler'…; trục vít và đầu nén nhận tham số (xem HUONG-DAN.md, phần 5).
+const model = buildModel('rotor', { grooves: 6, gateTeeth: 11 });
 scene.add(model.root);
 setExplosion(model, 0); // Giá trị từ 0 đến 1 để tách cụm.
 

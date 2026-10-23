@@ -1,1 +1,1 @@
-{"name":"water-injected-compressor-parts","version":"1.0.0","type":"module","private":true,"scripts":{"test":"node --test tests/models.test.mjs","export":"node export-models.mjs"}}
+{"name":"water-injected-compressor-parts","version":"2.0.0","type":"module","private":true,"scripts":{"test":"node --test tests/models.test.mjs","export":"node export-models.mjs"}}

@@ -1,190 +1,1458 @@
 [
-  {
-    "id": "rotor",
-    "name": "Trục vít · hai bánh sao",
-    "file": "rotor.glb",
-    "bytes": 2434504,
-    "refs": [
-      "H3",
-      "H2"
+ {
+  "id": "rotor",
+  "name": "Trục vít · hai bánh sao",
+  "file": "rotor.glb",
+  "bytes": 3203644,
+  "triangles": 91544,
+  "refs": [
+   "H3",
+   "H2"
+  ],
+  "notes": "1 trục vít, 2 bánh sao trên trục vuông góc. Rãnh sinh từ chuyển động của răng bánh sao (mô hình động học lý tưởng), chưa phải biên dạng bao chế tạo.",
+  "summary": "A = 1,33 · L = 1,51 · 6/11 · quấn ≈ 225°",
+  "params": {
+   "screwRadius": 0.83,
+   "grooves": 6,
+   "gateTeeth": 11,
+   "gateRadius": 0.83,
+   "grooveDepth": 0.33,
+   "toothWidth": 0.15,
+   "toothRootWidth": 0.19,
+   "gateThickness": 0.075,
+   "clearance": 0.03,
+   "tipClearance": 0.02,
+   "rootGap": 0.04,
+   "screwLength": 0,
+   "edge": 0.012,
+   "profile": "dong-hoc",
+   "twist": 1.9,
+   "meridians": 720
+  },
+  "illustrativeParts": [
+   "Đai ốc khóa đầu xả",
+   "Vòng giữ phía truyền động",
+   "Giá đỡ bánh sao A",
+   "Giá đỡ bánh sao B"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Đầu trục truyền động",
+    "name": "Đầu trục truyền động",
+    "kind": "co-khi",
+    "size": 0.21,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "1 trục vít; 2 bánh sao. Biên dạng 6 rãnh / 11 răng là tham số minh họa, chưa phải biên dạng bao chế tạo."
+    "position": [
+     2.2332,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "airend",
+  "name": "Đầu nén cắt mở",
+  "file": "airend.glb",
+  "bytes": 6803992,
+  "triangles": 221661,
+  "refs": [
+   "H2",
+   "H3",
+   "H4"
+  ],
+  "notes": "Vỏ đúc rỗng có độ dày, hai khoang bánh sao, nắp hông, nắp ổ, ổ đỡ, phớt, chuông nối động cơ, cửa hút trên và cửa xả dưới.",
+  "summary": "A = 1,33 · L = 1,51 · 6/11 · quấn ≈ 225°",
+  "params": {
+   "screwRadius": 0.83,
+   "grooves": 6,
+   "gateTeeth": 11,
+   "gateRadius": 0.83,
+   "grooveDepth": 0.33,
+   "toothWidth": 0.15,
+   "toothRootWidth": 0.19,
+   "gateThickness": 0.075,
+   "clearance": 0.03,
+   "tipClearance": 0.02,
+   "rootGap": 0.04,
+   "screwLength": 0,
+   "edge": 0.012,
+   "profile": "dong-hoc",
+   "twist": 1.9,
+   "meridians": 720
   },
-  {
-    "id": "airend",
-    "name": "Đầu nén cắt mở",
-    "file": "airend.glb",
-    "bytes": 6194800,
-    "refs": [
-      "H2",
-      "H3",
-      "H4"
+  "illustrativeParts": [
+   "Đai ốc khóa đầu xả",
+   "Vòng giữ phía truyền động",
+   "Giá đỡ bánh sao A",
+   "Giá đỡ bánh sao B",
+   "Ổ đỡ đôi bánh sao A trên",
+   "Ổ đỡ đũa bánh sao A dưới",
+   "Ổ đỡ đũa bánh sao B trên",
+   "Ổ đỡ đôi bánh sao B dưới",
+   "Cặp ổ bi đỡ chặn phía xả",
+   "Phớt trục phía xả",
+   "Ổ đũa trụ phía truyền động",
+   "Phớt trục phía truyền động",
+   "Vòi phun trong vỏ (minh họa)"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Cửa hút khí (lắp van hút)",
+    "name": "Cửa hút khí (lắp van hút)",
+    "kind": "khi",
+    "size": 0.26,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
     ],
-    "notes": "Vỏ, nắp, gối đỡ và cơ cấu bên trong tách thành từng đối tượng."
-  },
-  {
-    "id": "motor",
-    "name": "Động cơ · khớp nối",
-    "file": "motor.glb",
-    "bytes": 1421488,
-    "refs": [
-      "H1",
-      "H4"
+    "position": [
+     0.4143,
+     1.2,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Cửa xả khí–nước (tới van một chiều)",
+    "name": "Cửa xả khí–nước (tới van một chiều)",
+    "kind": "khi",
+    "size": 0.2,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
     ],
-    "notes": "Gân tản nhiệt, vỏ quạt, hộp cực, chân đỡ và khớp nối có tên riêng."
-  },
-  {
-    "id": "separator",
-    "name": "Bình tách khí–nước",
-    "file": "separator.glb",
-    "bytes": 1358348,
-    "refs": [
-      "H1",
-      "H4",
-      "H7"
+    "position": [
+     -0.4519,
+     -1.2,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Cửa phun nước bôi trơn",
+    "name": "Cửa phun nước bôi trơn",
+    "kind": "nuoc",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "Có vỏ, vách hướng dòng, nước, kính quan sát, cảm biến và cụm van đỉnh."
-  },
-  {
-    "id": "cooler",
-    "name": "Két nóc · hai quạt",
-    "file": "cooler.glb",
-    "bytes": 1429516,
-    "refs": [
-      "H1",
-      "H5"
+    "position": [
+     -0.04,
+     1.36,
+     0.64
+    ]
+   },
+   {
+    "node": "Cổng: Mặt bích nối động cơ",
+    "name": "Mặt bích nối động cơ",
+    "kind": "co-khi",
+    "size": 1.5,
+    "note": "12 lỗ trên vòng bán kính 1,38; lỗ định tâm bán kính 1,17",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "Hai quạt ở dưới két. Hạt gió minh họa hướng từ dưới lên."
-  },
-  {
-    "id": "air-filter",
-    "name": "Lọc khí đầu hút",
-    "file": "air-filter.glb",
-    "bytes": 670100,
-    "refs": [
-      "H8",
-      "H4"
+    "position": [
+     3.3532,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Đầu trục truyền động",
+    "name": "Đầu trục truyền động",
+    "kind": "co-khi",
+    "size": 0.21,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "Có vỏ, lõi xếp nếp, nắp, gioăng, trục giữ và đai ốc tai."
-  },
-  {
-    "id": "water-filter",
-    "name": "Lọc nước nhỏ",
-    "file": "water-filter.glb",
-    "bytes": 725572,
-    "refs": [
-      "H9",
-      "H5"
+    "position": [
+     2.2332,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Chân đỡ trước",
+    "name": "Chân đỡ trước",
+    "kind": "co-khi",
+    "size": 0.2,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
     ],
-    "notes": "Đầu lọc cố định, cốc tháo xuống, lõi và trục giữ tách riêng."
-  },
-  {
-    "id": "combined-filter",
-    "name": "Lọc nước tổ hợp",
-    "file": "combined-filter.glb",
-    "bytes": 1822028,
-    "refs": [
-      "H10"
+    "position": [
+     -1.3432,
+     -1.45,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "motor",
+  "name": "Động cơ · khớp nối",
+  "file": "motor.glb",
+  "bytes": 3008196,
+  "triangles": 76383,
+  "refs": [
+   "H1",
+   "H4"
+  ],
+  "notes": "Thân gang có gân, nắp đầu mặt bích, chân đế, hộp đấu điện và đầu cáp, nắp quạt có lưới, khớp nối vấu hai nửa với đệm đàn hồi và nắp che tháo được.",
+  "summary": "Tâm trục cao 1 · thân R 0,78 có 28 gân · mặt bích R 1,5 khớp chuông nối đầu nén · khớp vấu 3+3, đệm sao 6 cánh",
+  "illustrativeParts": [
+   "Stato và cuộn dây (minh họa)",
+   "Ổ bi hai đầu trục (minh họa)",
+   "Roto lồng sóc (minh họa)",
+   "Khớp nối vấu cong",
+   "Cầu đấu dây (minh họa)"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Mặt bích nối chuông đầu nén",
+    "name": "Mặt bích nối chuông đầu nén",
+    "kind": "co-khi",
+    "size": 1.5,
+    "note": "gờ định tâm bán kính 1,16; 12 lỗ trên vòng bán kính 1,38",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "Nắp bắt bu lông, đĩa ép, đai ốc, lõi dài và đế giữ."
-  },
-  {
-    "id": "softener",
-    "name": "Nước bù · làm mềm",
-    "file": "softener.glb",
-    "bytes": 607892,
-    "refs": [
-      "H7"
+    "position": [
+     1.44,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Đầu trục động cơ",
+    "name": "Đầu trục động cơ",
+    "kind": "co-khi",
+    "size": 0.16,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "Bình làm mềm, đầu điều khiển, van điện từ, van tay và lọc Y."
-  },
-  {
-    "id": "inlet",
-    "name": "Van hút khí",
-    "file": "inlet.glb",
-    "bytes": 413052,
-    "refs": [
-      "H4",
-      "H7"
+    "position": [
+     2.47,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nửa khớp nối phía đầu nén",
+    "name": "Nửa khớp nối phía đầu nén",
+    "kind": "co-khi",
+    "size": 0.21,
+    "note": "lỗ trục bán kính 0,21",
+    "dir": [
+     1,
+     0,
+     0
     ],
-    "notes": "Thân van, mặt bích, đĩa van và cơ cấu chấp hành."
-  },
-  {
-    "id": "minimum",
-    "name": "Van áp suất tối thiểu",
-    "file": "minimum.glb",
-    "bytes": 753584,
-    "refs": [
-      "H1",
-      "H4"
+    "position": [
+     3.09,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Đầu cáp nguồn",
+    "name": "Đầu cáp nguồn",
+    "kind": "dien",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     0,
+     1
     ],
-    "notes": "Thân van, nắp lò xo, cửa ra và đầu lắp đồng hồ."
-  },
-  {
-    "id": "check",
-    "name": "Van một chiều",
-    "file": "check.glb",
-    "bytes": 754228,
-    "refs": [
-      "H4",
-      "H6"
+    "position": [
+     0.18,
+     1.01,
+     0.36
+    ]
+   },
+   {
+    "node": "Cổng: Lỗ chân đế sau phải",
+    "name": "Lỗ chân đế sau phải",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
     ],
-    "notes": "Mặt bích, thân, đĩa và lò xo hồi."
-  },
-  {
-    "id": "water-valve",
-    "name": "Van ngắt nước",
-    "file": "water-valve.glb",
-    "bytes": 108168,
-    "refs": [
-      "H6",
-      "H7"
+    "position": [
+     -0.72,
+     -1,
+     -0.68
+    ]
+   },
+   {
+    "node": "Cổng: Lỗ chân đế sau trái",
+    "name": "Lỗ chân đế sau trái",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
     ],
-    "notes": "Cuộn điện, thân van, đầu nối và ty van."
-  },
-  {
-    "id": "distributor",
-    "name": "Bộ chia nước",
-    "file": "distributor.glb",
-    "bytes": 319092,
-    "refs": [
-      "H5",
-      "H6"
+    "position": [
+     -0.72,
+     -1,
+     0.68
+    ]
+   },
+   {
+    "node": "Cổng: Lỗ chân đế trước phải",
+    "name": "Lỗ chân đế trước phải",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
     ],
-    "notes": "Thân chia nhỏ, đầu cấp và các nhánh ra."
-  },
-  {
-    "id": "chassis",
-    "name": "Khung · tủ điện",
-    "file": "chassis.glb",
-    "bytes": 272956,
-    "refs": [
-      "H1"
+    "position": [
+     0.72,
+     -1,
+     -0.68
+    ]
+   },
+   {
+    "node": "Cổng: Lỗ chân đế trước trái",
+    "name": "Lỗ chân đế trước trái",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
     ],
-    "notes": "Bệ máy, cột, dầm nóc, tủ điện và bảng điều khiển."
+    "position": [
+     0.72,
+     -1,
+     0.68
+    ]
+   }
+  ]
+ },
+ {
+  "id": "separator",
+  "name": "Bình tách khí–nước",
+  "file": "separator.glb",
+  "bytes": 2273368,
+  "triangles": 59544,
+  "refs": [
+   "H1",
+   "H4",
+   "H6",
+   "H7"
+  ],
+  "notes": "Bình tách trong máy (khác bình tích áp bên ngoài): vỏ rỗng hai đáy elip, chân đỡ, cổ nối có mặt bích, van an toàn, đồng hồ, công tắc mức, kính mức, van xả đáy, cửa nước ra két và nước bù.",
+  "summary": "Bình đứng R 0,83 · thân trụ 2,45 · đáy elip 2:1 · thành 0,04 (phóng đại) · mực nước minh họa 2,05",
+  "illustrativeParts": [
+   "Que dò mức (minh họa)",
+   "Cơ cấu tách bên trong (minh họa)",
+   "Lưới tách giọt",
+   "Tấm chống xoáy cửa xả"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Vào hỗn hợp khí–nước (từ đầu nén qua ống chính)",
+    "name": "Vào hỗn hợp khí–nước (từ đầu nén qua ống chính)",
+    "kind": "khi",
+    "size": 0.14,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -1.126,
+     3.3,
+     0.3
+    ]
+   },
+   {
+    "node": "Cổng: Khí ra (tới van áp suất tối thiểu)",
+    "name": "Khí ra (tới van áp suất tối thiểu)",
+    "kind": "khi",
+    "size": 0.13,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     0,
+     4.261,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nước ra (tới két giải nhiệt)",
+    "name": "Nước ra (tới két giải nhiệt)",
+    "kind": "nuoc",
+    "size": 0.05,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     -1.7854,
+     1.6,
+     0.6498
+    ]
+   },
+   {
+    "node": "Cổng: Nước bù vào (từ van điện từ)",
+    "name": "Nước bù vào (từ van điện từ)",
+    "kind": "nuoc",
+    "size": 0.03,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     1.0649,
+     2.3,
+     0.7456
+    ]
+   },
+   {
+    "node": "Cổng: Xả đáy",
+    "name": "Xả đáy",
+    "kind": "nuoc",
+    "size": 0.035,
+    "note": "",
+    "dir": [
+     0.7071,
+     0,
+     0.7071
+    ],
+    "position": [
+     0.55,
+     0.175,
+     0.55
+    ]
+   },
+   {
+    "node": "Cổng: Van an toàn – cửa thoát",
+    "name": "Van an toàn – cửa thoát",
+    "kind": "khi",
+    "size": 0.035,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.5137,
+     4.2479,
+     0.21
+    ]
+   },
+   {
+    "node": "Cổng: Đế chân 45°",
+    "name": "Đế chân 45°",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     0.6505,
+     0,
+     0.6505
+    ]
+   },
+   {
+    "node": "Cổng: Đế chân 135°",
+    "name": "Đế chân 135°",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     -0.6505,
+     0,
+     0.6505
+    ]
+   },
+   {
+    "node": "Cổng: Đế chân 225°",
+    "name": "Đế chân 225°",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     -0.6505,
+     0,
+     -0.6505
+    ]
+   },
+   {
+    "node": "Cổng: Đế chân 315°",
+    "name": "Đế chân 315°",
+    "kind": "co-khi",
+    "size": 0.06,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     0.6505,
+     0,
+     -0.6505
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cooler",
+  "name": "Két nóc · hai quạt",
+  "file": "cooler.glb",
+  "bytes": 667060,
+  "triangles": 31636,
+  "refs": [
+   "H1",
+   "H5"
+  ],
+  "notes": "Két đặt trên nóc, hai quạt bên dưới (H1/H5). Chiều gió là tham số đảo được; mặc định từ dưới lên là giả định.",
+  "summary": "Chiều gió: từ dưới lên qua két (giả định, bản vẽ không có mũi tên)",
+  "params": {
+   "airflow": "len"
   },
-  {
-    "id": "receiver",
-    "name": "Bình tích áp khí nén",
-    "file": "receiver.glb",
-    "bytes": 948140,
-    "refs": [],
-    "notes": "Mẫu tổng quát; bộ ảnh chưa có bản vẽ riêng của bình này."
-  },
-  {
-    "id": "dryer",
-    "name": "Máy sấy lạnh",
-    "file": "dryer.glb",
-    "bytes": 678188,
-    "refs": [],
-    "notes": "Mẫu cấu tạo tổng quát; gồm máy nén lạnh, dàn ngưng, quạt và trao đổi nhiệt."
-  },
-  {
-    "id": "desiccant",
-    "name": "Sấy hấp phụ hai tháp",
-    "file": "desiccant.glb",
-    "bytes": 1334392,
-    "refs": [],
-    "notes": "Hai tháp, vật liệu hút ẩm, van, đường tái sinh và bộ giảm thanh."
-  }
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Nước nóng vào két",
+    "name": "Nước nóng vào két",
+    "kind": "nuoc",
+    "size": 0.12,
+    "note": "Chiều nước vào/ra là giả định; hai mặt bích đối xứng.",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -3.2,
+     0.1,
+     -1.1
+    ]
+   },
+   {
+    "node": "Cổng: Nước đã làm mát ra",
+    "name": "Nước đã làm mát ra",
+    "kind": "nuoc",
+    "size": 0.12,
+    "note": "Chiều nước vào/ra là giả định; hai mặt bích đối xứng.",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     3.2,
+     0.1,
+     -1.1
+    ]
+   },
+   {
+    "node": "Cổng: Gối đỡ két trái sau",
+    "name": "Gối đỡ két trái sau",
+    "kind": "co-khi",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     -2.8,
+     -0.21,
+     -1.77
+    ]
+   },
+   {
+    "node": "Cổng: Gối đỡ két trái trước",
+    "name": "Gối đỡ két trái trước",
+    "kind": "co-khi",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     -2.8,
+     -0.21,
+     1.77
+    ]
+   },
+   {
+    "node": "Cổng: Gối đỡ két phải sau",
+    "name": "Gối đỡ két phải sau",
+    "kind": "co-khi",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     2.8,
+     -0.21,
+     -1.77
+    ]
+   },
+   {
+    "node": "Cổng: Gối đỡ két phải trước",
+    "name": "Gối đỡ két phải trước",
+    "kind": "co-khi",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     2.8,
+     -0.21,
+     1.77
+    ]
+   }
+  ]
+ },
+ {
+  "id": "air-filter",
+  "name": "Lọc khí đầu hút",
+  "file": "air-filter.glb",
+  "bytes": 468912,
+  "triangles": 12824,
+  "refs": [
+   "H8",
+   "H4"
+  ],
+  "notes": "Có vỏ, lõi xếp nếp, nắp, gioăng, trục giữ và đai ốc tai.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Gió vào qua nắp lọc",
+    "name": "Gió vào qua nắp lọc",
+    "kind": "khi",
+    "size": 0.3,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -1.08,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Gió sạch ra (tới ống mềm đầu hút)",
+    "name": "Gió sạch ra (tới ống mềm đầu hút)",
+    "kind": "khi",
+    "size": 0.17,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     1.5,
+     -0.6,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "water-filter",
+  "name": "Lọc nước nhỏ",
+  "file": "water-filter.glb",
+  "bytes": 574660,
+  "triangles": 15164,
+  "refs": [
+   "H9",
+   "H5"
+  ],
+  "notes": "Đầu lọc cố định, cốc tháo xuống, lõi và trục giữ tách riêng.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Nước vào",
+    "name": "Nước vào",
+    "kind": "nuoc",
+    "size": 0.1,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.7,
+     2.35,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nước đã lọc ra",
+    "name": "Nước đã lọc ra",
+    "kind": "nuoc",
+    "size": 0.1,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -0.7,
+     2.35,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "combined-filter",
+  "name": "Lọc nước tổ hợp",
+  "file": "combined-filter.glb",
+  "bytes": 989380,
+  "triangles": 32432,
+  "refs": [
+   "H10"
+  ],
+  "notes": "Nắp bắt bu lông, đĩa ép, đai ốc, lõi dài và đế giữ.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Nước vào",
+    "name": "Nước vào",
+    "kind": "nuoc",
+    "size": 0.12,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -0.98,
+     1.1,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nước đã lọc ra",
+    "name": "Nước đã lọc ra",
+    "kind": "nuoc",
+    "size": 0.12,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.98,
+     1.1,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "softener",
+  "name": "Nước bù · làm mềm",
+  "file": "softener.glb",
+  "bytes": 513716,
+  "triangles": 31632,
+  "refs": [
+   "H7"
+  ],
+  "notes": "Bình làm mềm, đầu điều khiển, van điện từ, van tay và lọc Y.",
+  "illustrativeParts": [
+   "Van xả minh họa"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Nước cấp vào (H7: áp lực ≥ 0,2 MPa)",
+    "name": "Nước cấp vào (H7: áp lực ≥ 0,2 MPa)",
+    "kind": "nuoc",
+    "size": 0.1,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     3.03,
+     0.6,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nước bù ra (tới bình tách)",
+    "name": "Nước bù ra (tới bình tách)",
+    "kind": "nuoc",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     2.13,
+     1.7,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "inlet",
+  "name": "Van hút khí",
+  "file": "inlet.glb",
+  "bytes": 220980,
+  "triangles": 5760,
+  "refs": [
+   "H4",
+   "H7"
+  ],
+  "notes": "Thân van, mặt bích, đĩa van và cơ cấu chấp hành.",
+  "illustrativeParts": [
+   "Đĩa van hút"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Gió sạch vào (từ lọc khí)",
+    "name": "Gió sạch vào (từ lọc khí)",
+    "kind": "khi",
+    "size": 0.44,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     0,
+     0.34,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Mặt bích lắp lên cửa hút đầu nén",
+    "name": "Mặt bích lắp lên cửa hút đầu nén",
+    "kind": "khi",
+    "size": 0.45,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     0,
+     -0.41,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "minimum",
+  "name": "Van áp suất tối thiểu",
+  "file": "minimum.glb",
+  "bytes": 437628,
+  "triangles": 12776,
+  "refs": [
+   "H1",
+   "H4"
+  ],
+  "notes": "Thân van, nắp lò xo, cửa ra và đầu lắp đồng hồ.",
+  "illustrativeParts": [
+   "Lò xo và đĩa van"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Vào từ bình tách",
+    "name": "Vào từ bình tách",
+    "kind": "khi",
+    "size": 0.25,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     0,
+     -0.39,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Khí ra (tới đường khí nén)",
+    "name": "Khí ra (tới đường khí nén)",
+    "kind": "khi",
+    "size": 0.16,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.84,
+     0.12,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "check",
+  "name": "Van một chiều",
+  "file": "check.glb",
+  "bytes": 241324,
+  "triangles": 10368,
+  "refs": [
+   "H4",
+   "H6"
+  ],
+  "notes": "Mặt bích, thân, đĩa và lò xo hồi.",
+  "illustrativeParts": [
+   "Đĩa một chiều",
+   "Lò xo hồi van một chiều"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Vào từ cửa xả đầu nén",
+    "name": "Vào từ cửa xả đầu nén",
+    "kind": "khi",
+    "size": 0.28,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -0.58,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Ra ống chính tới bình tách",
+    "name": "Ra ống chính tới bình tách",
+    "kind": "khi",
+    "size": 0.28,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.58,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "water-valve",
+  "name": "Van ngắt nước",
+  "file": "water-valve.glb",
+  "bytes": 109072,
+  "triangles": 3152,
+  "refs": [
+   "H6",
+   "H7"
+  ],
+  "notes": "Cuộn điện, thân van, đầu nối và ty van.",
+  "illustrativeParts": [
+   "Ty van"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Nước vào",
+    "name": "Nước vào",
+    "kind": "nuoc",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nước ra (tới bộ chia nước)",
+    "name": "Nước ra (tới bộ chia nước)",
+    "kind": "nuoc",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.33,
+     0,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Dây điện cuộn van",
+    "name": "Dây điện cuộn van",
+    "kind": "dien",
+    "size": 0.05,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.23,
+     0.29,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "distributor",
+  "name": "Bộ chia nước",
+  "file": "distributor.glb",
+  "bytes": 135632,
+  "triangles": 6444,
+  "refs": [
+   "H5",
+   "H6"
+  ],
+  "notes": "Thân chia nhỏ, đầu cấp và các nhánh ra.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Nước vào",
+    "name": "Nước vào",
+    "kind": "nuoc",
+    "size": 0.09,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     0,
+     0.5,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Nhánh ra 1",
+    "name": "Nhánh ra 1",
+    "kind": "nuoc",
+    "size": 0.065,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -0.54,
+     0,
+     -0.17
+    ]
+   },
+   {
+    "node": "Cổng: Nhánh ra 2",
+    "name": "Nhánh ra 2",
+    "kind": "nuoc",
+    "size": 0.065,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -0.54,
+     0,
+     0.17
+    ]
+   },
+   {
+    "node": "Cổng: Nhánh ra 3",
+    "name": "Nhánh ra 3",
+    "kind": "nuoc",
+    "size": 0.065,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.54,
+     0,
+     -0.17
+    ]
+   },
+   {
+    "node": "Cổng: Nhánh ra 4",
+    "name": "Nhánh ra 4",
+    "kind": "nuoc",
+    "size": 0.065,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.54,
+     0,
+     0.17
+    ]
+   }
+  ]
+ },
+ {
+  "id": "chassis",
+  "name": "Khung · tủ điện",
+  "file": "chassis.glb",
+  "bytes": 92800,
+  "triangles": 5296,
+  "refs": [
+   "H1"
+  ],
+  "notes": "Bệ máy, cột, dầm nóc, tủ điện và bảng điều khiển.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Chân bệ 1",
+    "name": "Chân bệ 1",
+    "kind": "co-khi",
+    "size": 0.15,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     -2.6,
+     -0.19,
+     -1.58
+    ]
+   },
+   {
+    "node": "Cổng: Chân bệ 2",
+    "name": "Chân bệ 2",
+    "kind": "co-khi",
+    "size": 0.15,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     -2.6,
+     -0.19,
+     1.58
+    ]
+   },
+   {
+    "node": "Cổng: Chân bệ 3",
+    "name": "Chân bệ 3",
+    "kind": "co-khi",
+    "size": 0.15,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     2.6,
+     -0.19,
+     -1.58
+    ]
+   },
+   {
+    "node": "Cổng: Chân bệ 4",
+    "name": "Chân bệ 4",
+    "kind": "co-khi",
+    "size": 0.15,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     2.6,
+     -0.19,
+     1.58
+    ]
+   }
+  ]
+ },
+ {
+  "id": "receiver",
+  "name": "Bình tích áp khí nén",
+  "file": "receiver.glb",
+  "bytes": 479048,
+  "triangles": 20724,
+  "refs": [],
+  "notes": "Mẫu tổng quát; bộ ảnh chưa có bản vẽ riêng của bình này.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Khí nén vào",
+    "name": "Khí nén vào",
+    "kind": "khi",
+    "size": 0.12,
+    "note": "",
+    "dir": [
+     -1,
+     0,
+     0
+    ],
+    "position": [
+     -1.2,
+     1.1,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Khí nén ra",
+    "name": "Khí nén ra",
+    "kind": "khi",
+    "size": 0.12,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     1.2,
+     3,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Xả đáy",
+    "name": "Xả đáy",
+    "kind": "nuoc",
+    "size": 0.055,
+    "note": "",
+    "dir": [
+     1,
+     0,
+     0
+    ],
+    "position": [
+     0.6,
+     -0.05,
+     0
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dryer",
+  "name": "Máy sấy lạnh",
+  "file": "dryer.glb",
+  "bytes": 625664,
+  "triangles": 19596,
+  "refs": [],
+  "notes": "Mẫu cấu tạo tổng quát; gồm máy nén lạnh, dàn ngưng, quạt và trao đổi nhiệt.",
+  "illustrativeParts": [
+   "Máy nén môi chất lạnh",
+   "Khối trao đổi nhiệt khí",
+   "Dàn ngưng và quạt",
+   "Bộ tách và xả ngưng"
+  ],
+  "ports": [
+   {
+    "node": "Cổng: Khí ẩm vào",
+    "name": "Khí ẩm vào",
+    "kind": "khi",
+    "size": 0.09,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     -0.32,
+     3.45,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Khí khô ra",
+    "name": "Khí khô ra",
+    "kind": "khi",
+    "size": 0.09,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     0.32,
+     3.45,
+     0
+    ]
+   },
+   {
+    "node": "Cổng: Xả nước ngưng",
+    "name": "Xả nước ngưng",
+    "kind": "nuoc",
+    "size": 0.05,
+    "note": "",
+    "dir": [
+     0,
+     -1,
+     0
+    ],
+    "position": [
+     0.9,
+     0,
+     0.6
+    ]
+   }
+  ]
+ },
+ {
+  "id": "desiccant",
+  "name": "Sấy hấp phụ hai tháp",
+  "file": "desiccant.glb",
+  "bytes": 728352,
+  "triangles": 43956,
+  "refs": [],
+  "notes": "Hai tháp, vật liệu hút ẩm, van, đường tái sinh và bộ giảm thanh.",
+  "illustrativeParts": [],
+  "ports": [
+   {
+    "node": "Cổng: Khí ẩm vào (vị trí ước lượng)",
+    "name": "Khí ẩm vào (vị trí ước lượng)",
+    "kind": "khi",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     0,
+     0,
+     1
+    ],
+    "position": [
+     0,
+     0.2,
+     0.95
+    ]
+   },
+   {
+    "node": "Cổng: Khí khô ra",
+    "name": "Khí khô ra",
+    "kind": "khi",
+    "size": 0.08,
+    "note": "",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "position": [
+     0,
+     3.68,
+     0
+    ]
+   }
+  ]
+ }
 ]
