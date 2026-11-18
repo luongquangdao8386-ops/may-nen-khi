@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ví dụ ghép máy nén khí vào trang theo dõi</title>
+<style>
+ html,body{margin:0;height:100%;font:13px system-ui,"Segoe UI",Arial,sans-serif;background:#e9eef2;color:#1f3542}
+ #khung{position:fixed;inset:0}
+ .bang{position:fixed;left:12px;top:12px;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100vw - 24px);z-index:2}
+ .bang button{border:1px solid #c5d3dc;background:#fff;border-radius:6px;padding:7px 10px;font:inherit;cursor:pointer}
+ .bang button[aria-pressed=true]{background:#1f6f8b;color:#fff;border-color:#1f6f8b}
+ .ghi-chu{position:fixed;left:12px;bottom:12px;max-width:min(560px,calc(100vw - 24px));background:#fffc;border-radius:6px;padding:8px 10px;z-index:2}
+ .nhan{position:fixed;transform:translate(-50%,-100%);background:#14232dE6;color:#eaf4f8;border-radius:5px;padding:4px 7px;white-space:nowrap;pointer-events:none;font-variant-numeric:tabular-nums;z-index:1}
+ .nhan b{color:#8fd3ea;font-weight:600}
+ .nhan.loi{background:#b3261eE6}
+ #dang-dung{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#e9eef2;z-index:3}
+</style>
+<!-- Trang dùng phải có Three.js dạng ES module, đặt tên "three" trong importmap.
+     Bản này lấy Three.js đi kèm repo; trên trang khác có thể dùng CDN, ví dụ
+     "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js" -->
+<script type="importmap">{"imports":{"three":"../vendor/three.module.js"}}</script>
+</head>
+<body>
+<div id="khung"></div>
+<div id="dang-dung">Đang dựng mô hình máy nén khí (khoảng 5 giây)…</div>
+<div class="bang">
+ <button id="chay" aria-pressed="true">Đang chạy</button>
+ <button id="tai" aria-pressed="true">Có tải</button>
+ <button id="loi" aria-pressed="false">Giả lập lỗi nhiệt độ cao</button>
+ <button id="cat" aria-pressed="false">Mặt cắt</button>
+</div>
+<p class="ghi-chu">Số liệu trên nhãn là <b>giả lập</b>. Thay hàm <code>docSoLieu()</code> bằng dữ liệu thật (ví dụ đọc từ bộ chuyển RS485 qua chương trình trung gian rồi gửi sang trang bằng WebSocket).</p>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from '../vendor/OrbitControls.js';
+import { taoMayNenKhi } from './may-nen-khi-3d.js';
+
+// ---- Cảnh Three.js của trang (trang theo dõi của bạn đã có phần này) ----
+const khung = document.getElementById('khung');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+renderer.localClippingEnabled = true; // cần cho mặt cắt
+renderer.shadowMap.enabled = true;
+khung.append(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#e9eef2');
+const camera = new THREE.PerspectiveCamera(40, 1, 0.05, 200);
+camera.position.set(-2.4, 2.1, 3.3);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(-0.2, 0.7, 0);
+scene.add(new THREE.HemisphereLight('#ffffff', '#8ba3b4', 2.6));
+const den = new THREE.DirectionalLight('#fff6e8', 3.2);
+den.position.set(-4, 7, 5); den.castShadow = true; den.shadow.mapSize.set(2048, 2048);
+Object.assign(den.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4 });
+scene.add(den);
+const san = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.MeshStandardMaterial({ color: '#d9e1e6', roughness: 1 }));
+san.rotation.x = -Math.PI / 2; san.receiveShadow = true; scene.add(san);
+
+// ---- Ghép máy nén khí ----
+await new Promise((r) => requestAnimationFrame(() => setTimeout(r, 30)));
+const mnk = taoMayNenKhi({ phamVi: 'goi-may', tyLe: 0.1 }); // đơn vị mét
+mnk.nhom.position.set(0, 0, 0);          // đặt vào vị trí trong phòng máy
+mnk.nhom.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+scene.add(mnk.nhom);
+document.getElementById('dang-dung').remove();
+
+// ---- Nhãn số liệu gắn vào điểm trên mô hình ----
+const NHAN = [
+  ['apSuatXa', 'Áp suất khí ra', (s) => `${s.apSuatXa.toFixed(2)} MPa`],
+  ['binhTach', 'Bình tách', (s) => `${s.apSuatBinh.toFixed(2)} MPa`],
+  ['dauNen', 'Nhiệt độ khí xả', (s) => `${s.nhietDoXa.toFixed(1)} °C`],
+  ['ket', 'Nước vào / ra két', (s) => `${s.nuocVaoKet.toFixed(1)} / ${s.nuocRaKet.toFixed(1)} °C`],
+  ['mucNuoc', 'Mức nước bình tách', (s) => `${Math.round(s.mucNuoc)} %`],
+  ['dongCo', 'Dòng động cơ', (s) => `${s.dongDien.toFixed(0)} A`],
+];
+const theNhan = NHAN.map(([khoa]) => { const d = document.createElement('div'); d.className = 'nhan'; document.body.append(d); return d; });
+
+// ---- Nguồn số liệu: thay bằng dữ liệu thật ----
+const tt = { chay: true, coTai: true, loi: false };
+function docSoLieu(t) {
+  const tai = tt.chay && tt.coTai ? 1 : tt.chay ? 0.25 : 0;
+  return {
+    apSuatXa: tt.chay ? 0.62 + 0.08 * tai + 0.01 * Math.sin(t / 3) : 0,
+    apSuatBinh: tt.chay ? 0.66 + 0.08 * tai : 0,
+    nhietDoXa: tt.loi ? 62 + Math.sin(t) : 28 + 14 * tai + Math.sin(t / 5),
+    nuocVaoKet: 26 + 12 * tai, nuocRaKet: 24 + 6 * tai,
+    mucNuoc: 55 + 5 * Math.sin(t / 20),
+    dongDien: 20 + 120 * tai,
+  };
+}
+
+// ---- Nút điều khiển của ví dụ ----
+const nut = (id, ham) => document.getElementById(id).addEventListener('click', (e) => { const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); ham(on, b); });
+nut('chay', (on, b) => { tt.chay = on; b.textContent = on ? 'Đang chạy' : 'Đang dừng'; });
+nut('tai', (on, b) => { tt.coTai = on; b.textContent = on ? 'Có tải' : 'Không tải'; });
+nut('loi', (on) => { tt.loi = on; mnk.toSang('Đầu nén (cụm 02)', on ? '#e53935' : null); });
+nut('cat', (on) => mnk.matCat(on));
+
+function doiCo() { const w = khung.clientWidth, h = khung.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+new ResizeObserver(doiCo).observe(khung); doiCo();
+const dongHo = new THREE.Clock(), p = new THREE.Vector3();
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(0.1, dongHo.getDelta()), t = dongHo.elapsedTime;
+  mnk.capNhat(dt, { chay: tt.chay, coTai: tt.coTai });
+  const s = docSoLieu(t);
+  NHAN.forEach(([khoa, ten, giaTri], i) => {
+    mnk.viTriNhan(khoa, p).project(camera);
+    const d = theNhan[i], an = p.z > 1;
+    d.hidden = an; if (an) return;
+    d.style.left = `${(p.x + 1) / 2 * khung.clientWidth}px`; d.style.top = `${(1 - p.y) / 2 * khung.clientHeight - 6}px`;
+    d.innerHTML = `${ten}: <b>${giaTri(s)}</b>`;
+    d.classList.toggle('loi', tt.loi && khoa === 'dauNen');
+  });
+  controls.update();
+  renderer.render(scene, camera);
+});
+window.mnk = mnk;
+</script>
+</body>
+</html>

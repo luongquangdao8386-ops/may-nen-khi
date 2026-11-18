@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {THREE,M,screwGeometry,pleats,screwKinematics,singleScrewGeometry,insideScrew,revolveGeometry} from '../geometry.js';
 import {CATALOG,buildModel,setExplosion,updateMotion,setSection,setAirflow,showPorts} from '../models.js';
+import {taoMayNenKhi} from '../tich-hop.js';
 
 const models=new Map();const get=id=>{if(!models.has(id))models.set(id,buildModel(id));return models.get(id);};
 
@@ -123,4 +124,18 @@ test('Trạm ghép: trục động cơ quay cùng trục vít; mặt cắt bằn
  const fresh=buildModel('motor');setSection(fresh,false);let clipped=0;fresh.root.traverse(o=>{if(o.isMesh)for(const m of [o.material].flat())if(m.clippingPlanes?.length)clipped++;});assert.equal(clipped,0);
  setSection(get('rotor'),false);assert.equal(M.steel.clippingPlanes.length,0);
  setSection(st,false);
+});
+
+test('Gói tích hợp: dựng theo mét, quay khi chạy và đứng yên khi dừng, nhãn, tô sáng, mặt cắt',()=>{
+ const mk=taoMayNenKhi(),b=new THREE.Box3().setFromObject(mk.nhom),sz=b.getSize(new THREE.Vector3());
+ assert.ok(sz.x>1.5&&sz.x<4&&sz.y>1&&sz.y<2,'cỡ gói máy theo mét: '+sz.toArray());
+ const screw=mk.chiTiet('Trục vít chính'),fan=mk.chiTiet('Cánh quạt A'),vane=mk.chiTiet('Đĩa bướm');
+ mk.capNhat(.5,{chay:false});const a0=screw.rotation.x,f0=fan.rotation.y;mk.capNhat(.5,{chay:false});assert.equal(screw.rotation.x,a0);assert.equal(fan.rotation.y,f0);
+ for(let i=0;i<40;i++)mk.capNhat(.05,{chay:true,coTai:true});assert.notEqual(screw.rotation.x,a0);assert.notEqual(fan.rotation.y,f0);assert.ok(vane.rotation.z>1,'van hút mở khi có tải');
+ for(let i=0;i<60;i++)mk.capNhat(.05,{chay:true,coTai:false});assert.ok(vane.rotation.z<.05,'van hút đóng khi không tải');
+ for(const k of ['dauNen','dongCo','binhTach','apSuatXa','mucNuoc','ket','tuDien']){const p=mk.viTriNhan(k);assert.ok(p&&p.toArray().every(Number.isFinite),k);}
+ mk.nhom.position.set(5,0,2);const q=mk.viTriNhan('apSuatXa');assert.ok(q.x>4&&q.z>1,'nhãn đi theo nhóm');
+ assert.ok(mk.toSang('Bình tách'));mk.toSang('Bình tách',null);
+ assert.equal(mk.matCat(true).length,4);assert.equal(mk.matCat(false).length,0);
+ assert.ok(mk.cong().some(c=>c.loai==='khi'));
 });

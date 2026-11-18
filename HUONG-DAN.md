@@ -201,6 +201,10 @@ new GLTFLoader().load('/models/station.glb', gltf => scene.add(gltf.scene));
 
 GLB chứa hình học, nhóm có tên, vật liệu ở trạng thái lắp, cùng các nút rỗng “Cổng: …” (hướng nối là trục +Z cục bộ của nút; thông tin ở `extras.port`) và cờ `extras.minhHoa`. Hoạt ảnh, mặt cắt, tách cụm và hạt gió không ghi vào GLB. `station.glb` khoảng 32 MB, khoảng 1,3 triệu tam giác.
 
+### Cách C: một tệp để ghép vào trang khác
+
+`dist/may-nen-khi-3d.js` (đóng bằng `node dong-goi.mjs`) gói `geometry.js`, `models.js`, thư viện CSG và hàm `taoMayNenKhi()` trong `tich-hop.js`: dựng gói máy hoặc cả trạm theo mét, cập nhật chuyển động theo trạng thái chạy/có tải, điểm gắn nhãn số liệu, tô sáng báo lỗi, mặt cắt. Cách dùng và lời nhắn mẫu cho trang theo dõi vận hành: `dist/HUONG-DAN-TICH-HOP.md`.
+
 ## 9. Cổng nối
 
 Mỗi cụm có danh sách cổng (`model.ports`, nút “Cổng: …” trong GLB, mục `ports` trong `models-glb/manifest.json` với tọa độ và hướng theo hệ của cụm). Loại cổng: `khi`, `nuoc`, `co-khi`, `dien`. Ví dụ:
@@ -222,7 +226,7 @@ Ghép hai cụm: đặt cổng của hai cụm trùng vị trí và ngược hư
 Cần Node.js 18 trở lên; thư viện đã đóng kèm, không cần `npm install`.
 
 ```bash
-node --test tests/models.test.mjs        # 15 phép thử (dưới một phút)
+node --test tests/models.test.mjs        # 16 phép thử (dưới một phút)
 node export-models.mjs                    # xuất lại 18 cụm + trạm thành GLB và manifest.json
 node export-models.mjs station --tham-so '{"enclosure":"dong"}' --ra ./ket-qua   # xuất riêng với tham số
 python3 build-standalone.py               # dựng lại MO-NGAY.html

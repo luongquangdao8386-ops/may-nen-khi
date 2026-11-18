@@ -6,6 +6,7 @@ Mô hình 3D máy nén khí trục vít đơn (một trục vít, hai bánh sao)
 - **Mở offline:** nhấp đúp `MO-NGAY.html` (Chrome/Edge có WebGL 2).
 - **Sửa mã:** chạy `python3 run.py` rồi mở `index.html`.
 - **Hướng dẫn đầy đủ, tham số, giả định và giới hạn:** [HUONG-DAN.md](HUONG-DAN.md).
+- **Ghép vào trang Three.js khác** (ví dụ trang theo dõi vận hành): một tệp `dist/may-nen-khi-3d.js` và hàm `taoMayNenKhi()`, xem [dist/HUONG-DAN-TICH-HOP.md](dist/HUONG-DAN-TICH-HOP.md) và trang mẫu https://luongquangdao8386-ops.github.io/may-nen-khi/dist/vi-du.html.
 
 ![Trạm hoàn chỉnh](docs/anh/tram-tong-the.jpg)
 
@@ -32,7 +33,7 @@ Mô hình 3D máy nén khí trục vít đơn (một trục vít, hai bánh sao)
 ## Lệnh
 
 ```bash
-node --test tests/models.test.mjs   # kiểm tra (15 phép thử)
+node --test tests/models.test.mjs   # kiểm tra (16 phép thử)
 node export-models.mjs              # xuất 18 cụm + trạm thành GLB vào models-glb/
 python3 build-standalone.py         # dựng lại MO-NGAY.html
 ```
